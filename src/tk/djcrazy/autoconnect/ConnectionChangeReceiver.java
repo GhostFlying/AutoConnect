@@ -8,7 +8,6 @@ import android.net.NetworkInfo.State;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
-import android.widget.Toast;
 
 public class ConnectionChangeReceiver extends BroadcastReceiver {
 
@@ -23,8 +22,9 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
 		if (State.CONNECTED == state) {
 	        WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);  
 	        WifiInfo wifiInfo = mWifiManager.getConnectionInfo();  
-	        wifiInfo.getSSID();
- 	 		context.startService(new Intent(context, ConnectService.class));
+	        if ("ZJUWLAN".equalsIgnoreCase(wifiInfo.getSSID())) {
+	 	 		context.startService(new Intent(context, ConnectService.class));
+			}
 		}
   	}
 }
