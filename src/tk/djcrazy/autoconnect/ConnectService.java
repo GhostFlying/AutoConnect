@@ -49,8 +49,7 @@ public class ConnectService extends RoboIntentService {
 	 * @param pwd
 	 */
 	private void doLogin(SharedPreferences sharedPreferences, String name, String pwd) {
-		Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-		Map<String, String> data = new HashMap<String, String>();
+ 		Map<String, String> data = new HashMap<String, String>();
 		data.put("action", "login");
 		data.put("username", name);
 		data.put("password", pwd);
@@ -69,27 +68,22 @@ public class ConnectService extends RoboIntentService {
 			if (body.contains("action=login_ok")) {
 				Log.i(TAG, "Login success");
 				showToastMessage("登录成功");
-				vibrator.vibrate(800);
-				sharedPreferences.edit()
+ 				sharedPreferences.edit()
 						.putLong(MainActivity.LAST_LOGIN_TIME, System.currentTimeMillis()).commit();
 			} else if ("password_error".equalsIgnoreCase(body)) {
 				Log.d(TAG, "login failed:" + res);
 				showToastMessage("密码错误");
-				vibrator.vibrate(100);
-			} else if ("username_error".equalsIgnoreCase(body)) {
+ 			} else if ("username_error".equalsIgnoreCase(body)) {
 				Log.d(TAG, "login failed:" + res);
 				showToastMessage("用户名错误");
-				vibrator.vibrate(100);
-			} else {
+ 			} else {
 				Log.d(TAG, "login failed:" + res);
 				showToastMessage("登陆失败：" + body);
-				vibrator.vibrate(100);
-			}
+ 			}
 		} else {
 			Log.d(TAG, "rad_online failed:" + res);
 			showToastMessage("登陆失败：" + res);
-			vibrator.vibrate(100);
-		}
+ 		}
 	}
 
 	private void showToastMessage(final String msg) {
