@@ -33,13 +33,13 @@ public class ConnectService extends RoboIntentService {
 			return;
 		}
 		if (name.length() < 1 || pwd.length() < 1) {
-			showToastMessage("尚未设置用户名密码");
+			showToastMessage(getString(R.string.user_not_configured));
 			return;
 		}
 		try {
 			doLogin(sharedPreferences, name, pwd);
 		} catch (Exception e) {
-			showToastMessage("未知错误");
+			showToastMessage(getString(R.string.error_unknown));
  		}
 	}
 
@@ -67,22 +67,22 @@ public class ConnectService extends RoboIntentService {
 					.body();
 			if (body.contains("action=login_ok")) {
 				Log.i(TAG, "Login success");
-				showToastMessage("登录成功");
+				showToastMessage(getString(R.string.login_success));
  				sharedPreferences.edit()
 						.putLong(MainActivity.LAST_LOGIN_TIME, System.currentTimeMillis()).commit();
 			} else if ("password_error".equalsIgnoreCase(body)) {
 				Log.d(TAG, "login failed:" + res);
-				showToastMessage("密码错误");
+				showToastMessage(getString(R.string.password_error));
  			} else if ("username_error".equalsIgnoreCase(body)) {
 				Log.d(TAG, "login failed:" + res);
-				showToastMessage("用户名错误");
+				showToastMessage(getString(R.string.username_error));
  			} else {
 				Log.d(TAG, "login failed:" + res);
-				showToastMessage("登陆失败：" + body);
+				showToastMessage(getString(R.string.other_error) + body);
  			}
 		} else {
 			Log.d(TAG, "rad_online failed:" + res);
-			showToastMessage("登陆失败：" + res);
+			showToastMessage(getString(R.string.other_error) + res);
  		}
 	}
 

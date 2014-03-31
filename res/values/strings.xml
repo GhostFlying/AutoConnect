@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AutoConnect</string> 
+    <string name="app_name">AutoConnect</string>
+    <string name="input_empty">用户名和密码不能为空</string>
+    <string name="input_saved">用户名和密码已保存</string>
+    <string name="user_not_configured">账号未设置</string>
+    <string name="error_unknown">Unknown</string>
+    <string name="login_success">成功登录</string>
+    <string name="password_error">密码错误</string>
+    <string name="username_error">用户名错误</string>
+    <string name="other_error">其它错误：</string> 
 
 </resources>

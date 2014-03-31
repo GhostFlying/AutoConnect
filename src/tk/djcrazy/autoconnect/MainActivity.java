@@ -39,13 +39,13 @@ public class MainActivity extends RoboActivity {
 				String name =  userName.getText().toString().trim();
 				String pwd = password.getText().toString().trim();
 				if (name.length()<1|| pwd.length()<1) {
-					Toast.makeText(MainActivity.this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MainActivity.this, getString(R.string.input_empty), Toast.LENGTH_SHORT).show();
 				} else {
 			        Editor editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
 			        editor.putString(USER_NAME, name);
 			        editor.putString(PASSWORD, pwd);
 			        editor.commit();
-					Toast.makeText(MainActivity.this, "用户名和密码已保存", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MainActivity.this, getString(R.string.input_saved), Toast.LENGTH_SHORT).show();
 					finish();
 				}
 			}
