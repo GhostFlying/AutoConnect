@@ -19,10 +19,11 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
  		ConnectivityManager connManager = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		State state = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+		Log.d(TAG, "onReceive:"+ state.toString());
 		if (State.CONNECTED == state) {
 	        WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);  
-	        WifiInfo wifiInfo = mWifiManager.getConnectionInfo();  
-	        if ("ZJUWLAN".equalsIgnoreCase(wifiInfo.getSSID())) {
+	        WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
+	        if ("ZJUWLAN".equals(wifiInfo.getSSID().replace("\"", ""))) {
 	 	 		context.startService(new Intent(context, ConnectService.class));
 			}
 		}
