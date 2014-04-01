@@ -35,13 +35,13 @@ public class ConnectService extends RoboIntentService {
 				MODE_PRIVATE);
 		String name = sharedPreferences.getString(MainActivity.USER_NAME, "");
 		String pwd = sharedPreferences.getString(MainActivity.PASSWORD, "");
+		long lastLogin = sharedPreferences.getLong(MainActivity.LAST_LOGIN_TIME, 0L);
 		if (intent.hasExtra("log")){
 			forceLogin(name,pwd);
 			sharedPreferences.edit()
 				.putLong(MainActivity.LAST_LOGIN_TIME, System.currentTimeMillis()).commit();
 			return;
-		}
-		long lastLogin = sharedPreferences.getLong(MainActivity.LAST_LOGIN_TIME, 0L);
+		}		
 		if (System.currentTimeMillis() - lastLogin < 10000) {
 			return;
 		}
@@ -74,8 +74,13 @@ public class ConnectService extends RoboIntentService {
 		String body = HttpRequest.post("http://net.zju.edu.cn/cgi-bin/srun_portal").form(data)
 				.body();
 		Log.d(TAG, body);
-		
-		if (body.equals("online_num_error")){
+		if (body.contains("action=login_ok")){
+			Log.i(TAG, "Login success");
+			showToastMessage(getString(R.string.login_success));
+			sharedPreferences.edit()
+				.putLong(MainActivity.LAST_LOGIN_TIME, System.currentTimeMillis()).commit();
+		}
+		else if (body.equals("online_num_error")){
 			showToastMessage(getString(R.string.alreay_login));
 			showNotification(getString(R.string.alreay_login), "");
 		}
