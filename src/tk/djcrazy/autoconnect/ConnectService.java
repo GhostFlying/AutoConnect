@@ -71,6 +71,14 @@ public class ConnectService extends RoboIntentService {
 		data.put("type", "2");
 		data.put("local_auth", "1");
 		
+		String networkTest = HttpRequest.post("http://zuits.zju.edu.cn/").body();
+		if (!networkTest.contains("net.zju.edu.cn")){
+			Log.i(TAG, "Login success ever");
+			showToastMessage(getString(R.string.login_success));
+			sharedPreferences.edit()
+				.putLong(MainActivity.LAST_LOGIN_TIME, System.currentTimeMillis()).commit();
+			return;
+		}
 		String body = HttpRequest.post("http://net.zju.edu.cn/cgi-bin/srun_portal").form(data)
 				.body();
 		Log.d(TAG, body);
@@ -96,35 +104,6 @@ public class ConnectService extends RoboIntentService {
 			Log.d(TAG, "login failed:" + body);
 			showToastMessage(getString(R.string.other_error) + body);
 		}
-		
-		
-
-/*		String res = HttpRequest.post("http://net.zju.edu.cn/rad_online.php")
-				.form("action", "auto_dm").form("uid", -1).form("username", name)
-				.form("password", pwd).body();
-
-		if ("ok".equalsIgnoreCase(res)) {
-			String body = HttpRequest.post("http://net.zju.edu.cn/cgi-bin/srun_portal").form(data)
-					.body();
-			if (body.contains("action=login_ok")) {
-				Log.i(TAG, "Login success");
-				showToastMessage(getString(R.string.login_success));
- 				sharedPreferences.edit()
-						.putLong(MainActivity.LAST_LOGIN_TIME, System.currentTimeMillis()).commit();
-			} else if ("password_error".equalsIgnoreCase(body)) {
-				Log.d(TAG, "login failed:" + res);
-				showToastMessage(getString(R.string.password_error));
- 			} else if ("username_error".equalsIgnoreCase(body)) {
-				Log.d(TAG, "login failed:" + res);
-				showToastMessage(getString(R.string.username_error));
- 			} else {
-				Log.d(TAG, "login failed:" + res);
-				showToastMessage(getString(R.string.other_error) + body);
- 			}
-		} else {
-			Log.d(TAG, "rad_online failed:" + res);
-			showToastMessage(getString(R.string.other_error) + res);
- 		}*/
 	}	
 	
 	private void forceLogin (String username, String pwd){
