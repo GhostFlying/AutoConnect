@@ -34,10 +34,7 @@
         </receiver>
         <receiver
             android:name="tk.djcrazy.autoconnect.ForceLoginReceiver"
-            android:label="Login">             
-        	<intent-filter >            
-                <action android:name="tk.djcrazy.autoconnect.FORCELOGIN"/>
-        	</intent-filter>        
+            android:label="Login">   
         </receiver>
         <service
             android:name=".ConnectService"

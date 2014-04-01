@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -37,10 +36,7 @@ public class ConnectService extends RoboIntentService {
 		String pwd = sharedPreferences.getString(MainActivity.PASSWORD, "");
 		long lastLogin = sharedPreferences.getLong(MainActivity.LAST_LOGIN_TIME, 0L);
 		if (intent.hasExtra("log")){
-			forceLogin(name,pwd);
-			sharedPreferences.edit()
-				.putLong(MainActivity.LAST_LOGIN_TIME, System.currentTimeMillis()).commit();
-			return;
+			logOut(name,pwd);
 		}		
 		if (System.currentTimeMillis() - lastLogin < 10000) {
 			return;
@@ -73,11 +69,12 @@ public class ConnectService extends RoboIntentService {
 		
 		String networkTest = HttpRequest.post("http://zuits.zju.edu.cn/").body();
 		if (!networkTest.contains("net.zju.edu.cn")){
-			Log.i(TAG, "Login success ever");
+			Log.i(TAG, "Login success ever。");
 			showToastMessage(getString(R.string.login_success));
-			sharedPreferences.edit()
-				.putLong(MainActivity.LAST_LOGIN_TIME, System.currentTimeMillis()).commit();
 			return;
+		}
+		else {
+			Log.i(TAG, "Have not log in.");
 		}
 		String body = HttpRequest.post("http://net.zju.edu.cn/cgi-bin/srun_portal").form(data)
 				.body();
@@ -106,13 +103,13 @@ public class ConnectService extends RoboIntentService {
 		}
 	}	
 	
-	private void forceLogin (String username, String pwd){
+	private void logOut (String username, String pwd){
 		String res = HttpRequest.post("http://net.zju.edu.cn/rad_online.php")
 				.form("action", "auto_dm").form("uid", -1).form("username", username)
 				.form("password", pwd).body();
+		Log.d(TAG, res);
 		if ("ok".equalsIgnoreCase(res)){
-			Log.i(TAG, "Login success");
-			showToastMessage(getString(R.string.login_success));
+			Log.i(TAG, "Log out successfully.");
 		}
 	}
 
@@ -149,7 +146,7 @@ public class ConnectService extends RoboIntentService {
 		        );
 		mBuilder.setContentIntent(resultPendingIntent);		
 		if (title == getString(R.string.alreay_login)){
-			Intent loginIntent = new Intent(FORCE_LOGIN);
+			Intent loginIntent = new Intent(this, ForceLoginReceiver.class);
 			PendingIntent mpending = PendingIntent.getBroadcast(this, 0, loginIntent, 0);
 			mBuilder.addAction(R.drawable.ic_launcher, getString(R.string.press_to_login), mpending);
 		}
