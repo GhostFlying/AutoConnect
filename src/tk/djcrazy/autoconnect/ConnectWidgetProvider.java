@@ -35,10 +35,20 @@ public class ConnectWidgetProvider extends AppWidgetProvider {
         Log.d(TAG, "onReceive start." + intent);
         if (intent.hasCategory(Intent.CATEGORY_ALTERNATIVE)) {
         	 WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);         	 
+        	 
+        	 WifiConfiguration zjuwlan = new WifiConfiguration();
+        	 zjuwlan.SSID = "\"ZJUWLAN\"";
+        	 zjuwlan.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         	 while (!mWifiManager.isWifiEnabled()) {
         		 mWifiManager.setWifiEnabled(true);
         	 }
+        	 mWifiManager.disconnect();
+        	 int netid = mWifiManager.addNetwork(zjuwlan);
+        	 mWifiManager.enableNetwork(netid, true);
+        	 mWifiManager.reconnect();
         	 List<WifiConfiguration> wifiList = mWifiManager.getConfiguredNetworks();
+        	 Log.d(TAG, "total count :" + wifiList.size());
+        	 /*List<WifiConfiguration> wifiList = mWifiManager.getConfiguredNetworks();
         	 Log.d(TAG, "total count :" + wifiList.size());
         	 mWifiManager.disconnect();
         	 for (WifiConfiguration each :wifiList) {      
@@ -50,7 +60,7 @@ public class ConnectWidgetProvider extends AppWidgetProvider {
         		 }
         	 }
         	 Toast.makeText(context, context.getString(R.string.please_connect_once), Toast.LENGTH_SHORT).show();
-        	 Log.e(TAG, "ZJUWLAN is not stored");        	 
+        	 Log.e(TAG, "ZJUWLAN is not stored");        	 */
         }
     }  
 	
