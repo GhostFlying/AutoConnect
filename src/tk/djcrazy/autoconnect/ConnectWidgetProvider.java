@@ -33,13 +33,12 @@ public class ConnectWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {  
         super.onReceive(context, intent);  
         Log.d(TAG, "onReceive start." + intent);
-        final String action = intent.getAction();
         if (intent.hasCategory(Intent.CATEGORY_ALTERNATIVE)) {
-        	 WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE); 
-        	 List<WifiConfiguration> wifiList = mWifiManager.getConfiguredNetworks();
+        	 WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);         	 
         	 while (!mWifiManager.isWifiEnabled()) {
         		 mWifiManager.setWifiEnabled(true);
         	 }
+        	 List<WifiConfiguration> wifiList = mWifiManager.getConfiguredNetworks();
         	 Log.d(TAG, "total count :" + wifiList.size());
         	 mWifiManager.disconnect();
         	 for (WifiConfiguration each :wifiList) {      
