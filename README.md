@@ -1,4 +1,0 @@
-AutoConnect
-===========
-
-AutoConnect for ZJUWLAN
