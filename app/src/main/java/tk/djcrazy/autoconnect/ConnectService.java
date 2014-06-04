@@ -69,8 +69,7 @@ public class ConnectService extends RoboIntentService {
 		
 		String networkTest = HttpRequest.post("http://zuits.zju.edu.cn/").body();
 		if (!networkTest.contains("net.zju.edu.cn")){
-			Log.i(TAG, "Login success ever。");
-			//showToastMessage(getString(R.string.login_success));
+			Log.i(TAG, "Login success ever.");
 			return;
 		}
 		else {
