@@ -21,6 +21,7 @@ import android.widget.Toast;
 public class ConnectService extends RoboIntentService {
 	private static final String TAG = "ConnectService";
 	private static final String FORCE_LOGIN = "tk.djcrazy.autoconnect.FORCELOGIN";
+    private static final String LOGIN_URL_PREFIX = "http://10.50.200.245/";
 	private Handler handler = new Handler();
 
 	public ConnectService() {
@@ -66,8 +67,14 @@ public class ConnectService extends RoboIntentService {
 		data.put("is_ldap", "1");
 		data.put("type", "2");
 		data.put("local_auth", "1");
-		
-		String networkTest = HttpRequest.post("http://zuits.zju.edu.cn/").body();
+
+        String networkTest = "";
+        try{
+            networkTest = HttpRequest.post("http://zuits.zju.edu.cn/").body();
+        }
+        catch (Exception e){
+
+        }
 		if (!networkTest.contains("net.zju.edu.cn")){
 			Log.i(TAG, "Login success ever.");
 			return;
@@ -75,7 +82,7 @@ public class ConnectService extends RoboIntentService {
 		else {
 			Log.i(TAG, "Have not log in.");
 		}
-		String body = HttpRequest.post("http://net.zju.edu.cn/cgi-bin/srun_portal").form(data)
+		String body = HttpRequest.post(LOGIN_URL_PREFIX + "cgi-bin/srun_portal").form(data)
 				.body();
 		Log.d(TAG, body);
 		if (body.contains("action=login_ok")){
@@ -103,7 +110,7 @@ public class ConnectService extends RoboIntentService {
 	}	
 	
 	private void logOut (String username, String pwd){
-		String res = HttpRequest.post("http://net.zju.edu.cn/rad_online.php")
+		String res = HttpRequest.post(LOGIN_URL_PREFIX + "rad_online.php")
 				.form("action", "auto_dm").form("uid", -1).form("username", username)
 				.form("password", pwd).body();
 		Log.d(TAG, res);
