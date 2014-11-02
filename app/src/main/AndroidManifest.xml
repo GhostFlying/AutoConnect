@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="21" />
 
     <application
         android:allowBackup="true"
@@ -36,17 +36,5 @@
             android:name="tk.djcrazy.autoconnect.ForceLoginReceiver"
             android:label="Login">   
         </receiver>
-        <receiver android:name=".ConnectWidgetProvider" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="tk.djcrazy.autoconnect.CONNECT" />
-            </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_info" />
-        </receiver>
-        <service
-            android:name=".ConnectService"
-            android:exported="false"  >
-        </service>
     </application>
 </manifest>
