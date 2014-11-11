@@ -32,9 +32,13 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="tk.djcrazy.autoconnect.ForceLoginReceiver"
-            android:label="Login">   
-        </receiver>
+        <service
+            android:name=".ConnectService"
+            android:exported="false"  >
+        </service>
+        <service
+            android:name=".ForceLoginService"
+            android:exported="false"  >
+        </service>
     </application>
 </manifest>

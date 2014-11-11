@@ -87,6 +87,7 @@
     <orderEntry type="library" exported="" name="javax.inject-1" level="project" />
     <orderEntry type="library" exported="" name="guice-3.0-no_aop" level="project" />
     <orderEntry type="library" exported="" name="http-request-5.4" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-21.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.0" level="project" />
     <orderEntry type="library" exported="" name="http-request-5.4-javadoc" level="project" />
   </component>

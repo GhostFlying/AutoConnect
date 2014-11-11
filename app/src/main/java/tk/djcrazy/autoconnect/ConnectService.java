@@ -21,7 +21,8 @@ import android.widget.Toast;
 public class ConnectService extends RoboIntentService {
 	private static final String TAG = "ConnectService";
 	private static final String FORCE_LOGIN = "tk.djcrazy.autoconnect.FORCELOGIN";
-    private static final String LOGIN_URL_PREFIX = "http://10.50.200.245/";
+    protected static final String LOGIN_URL_PREFIX = "http://10.50.200.245/";
+    protected static final String NETWORK_TEST_URL = "http://10.202.42.20/";
 	private Handler handler = new Handler();
 
 	public ConnectService() {
@@ -35,10 +36,8 @@ public class ConnectService extends RoboIntentService {
 				MODE_PRIVATE);
 		String name = sharedPreferences.getString(MainActivity.USER_NAME, "");
 		String pwd = sharedPreferences.getString(MainActivity.PASSWORD, "");
+
 		long lastLogin = sharedPreferences.getLong(MainActivity.LAST_LOGIN_TIME, 0L);
-		if (intent.hasExtra("log")){
-			logOut(name,pwd);
-		}		
 		if (System.currentTimeMillis() - lastLogin < 10000) {
 			return;
 		}
@@ -58,7 +57,7 @@ public class ConnectService extends RoboIntentService {
 	 * @param name
 	 * @param pwd
 	 */
-	private void doLogin(SharedPreferences sharedPreferences, String name, String pwd) {
+	protected void doLogin(SharedPreferences sharedPreferences, String name, String pwd) {
  		Map<String, String> data = new HashMap<String, String>();
 		data.put("action", "login");
 		data.put("username", name);
@@ -68,15 +67,12 @@ public class ConnectService extends RoboIntentService {
 		data.put("type", "2");
 		data.put("local_auth", "1");
 
-        String networkTest = "";
-        try{
-            networkTest = HttpRequest.post("http://zuits.zju.edu.cn/").body();
-        }
-        catch (Exception e){
 
-        }
+        String networkTest = HttpRequest.post(NETWORK_TEST_URL).body();
+
 		if (!networkTest.contains("net.zju.edu.cn")){
 			Log.i(TAG, "Login success ever.");
+            updateLastLoginTime(sharedPreferences);
 			return;
 		}
 		else {
@@ -88,9 +84,8 @@ public class ConnectService extends RoboIntentService {
 		if (body.contains("action=login_ok")){
 			Log.i(TAG, "Login success");
 			showToastMessage(getString(R.string.login_success));
-			sharedPreferences.edit()
-				.putLong(MainActivity.LAST_LOGIN_TIME, System.currentTimeMillis()).commit();
-		}
+            updateLastLoginTime(sharedPreferences);
+        }
 		else if (body.equals("online_num_error")){
 			showToastMessage(getString(R.string.alreay_login));
 			showNotification(getString(R.string.alreay_login), "");
@@ -107,20 +102,14 @@ public class ConnectService extends RoboIntentService {
 			Log.d(TAG, "login failed:" + body);
 			showToastMessage(getString(R.string.other_error) + body);
 		}
-	}	
-	
-	private void logOut (String username, String pwd){
-		String res = HttpRequest.post(LOGIN_URL_PREFIX + "rad_online.php")
-				.form("action", "auto_dm").form("uid", -1).form("username", username)
-				.form("password", pwd).body();
-		Log.d(TAG, res);
-		if ("ok".equalsIgnoreCase(res)){
-			Log.i(TAG, "Log out successfully.");
-		}
 	}
 
+    private void updateLastLoginTime(SharedPreferences sharedPreferences) {
+        sharedPreferences.edit()
+            .putLong(MainActivity.LAST_LOGIN_TIME, System.currentTimeMillis()).apply();
+    }
 
-	private void showToastMessage(final String msg) {
+    private void showToastMessage(final String msg) {
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
@@ -152,12 +141,20 @@ public class ConnectService extends RoboIntentService {
 		        );
 		mBuilder.setContentIntent(resultPendingIntent);		
 		if (title == getString(R.string.alreay_login)){
-			Intent loginIntent = new Intent(this, ForceLoginReceiver.class);
-			PendingIntent mpending = PendingIntent.getBroadcast(this, 0, loginIntent, 0);
+            Intent serviceIntent = new Intent(this, ForceLoginService.class);
+			PendingIntent mpending = PendingIntent.getService(this, 1, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			mBuilder.addAction(R.drawable.ic_launcher, getString(R.string.press_to_login), mpending);
+            mBuilder.setAutoCancel(true);
 		}
 		NotificationManager mNotificationManager =
 		    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.notify(10, mBuilder.build());
 	}
+
+
+    protected void cancelNotification(){
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(10);
+    }
 }

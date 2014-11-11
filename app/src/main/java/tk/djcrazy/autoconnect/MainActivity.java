@@ -1,8 +1,5 @@
 package tk.djcrazy.autoconnect;
 
-import roboguice.activity.RoboActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
