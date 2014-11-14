@@ -145,8 +145,8 @@ public class ConnectService extends RoboIntentService {
 			PendingIntent mpending = PendingIntent.getService(this, 1, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             Intent dismissServiceIntent = new Intent(this, DismissConnectService.class);
             PendingIntent dismissPending = PendingIntent.getService(this, 2, dismissServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            mBuilder.addAction(R.drawable.ic_clear_black_18dp, getString(R.string.press_to_dismiss), dismissPending);
-			mBuilder.addAction(R.drawable.ic_check_black_18dp, getString(R.string.press_to_login), mpending);
+            mBuilder.addAction(R.drawable.ic_clear_white_18dp, getString(R.string.press_to_dismiss), dismissPending);
+			mBuilder.addAction(R.drawable.ic_check_white_18dp, getString(R.string.press_to_login), mpending);
             mBuilder.setAutoCancel(true);
 		}
 		NotificationManager mNotificationManager =
