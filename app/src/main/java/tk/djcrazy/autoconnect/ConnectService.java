@@ -1,11 +1,5 @@
 package tk.djcrazy.autoconnect;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.github.kevinsawicki.http.HttpRequest;
-
-import roboguice.service.RoboIntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -17,6 +11,13 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.github.kevinsawicki.http.HttpRequest;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import roboguice.service.RoboIntentService;
 
 public class ConnectService extends RoboIntentService {
 	private static final String TAG = "ConnectService";
@@ -80,7 +81,6 @@ public class ConnectService extends RoboIntentService {
 		}
 		String body = HttpRequest.post(LOGIN_URL_PREFIX + "cgi-bin/srun_portal").form(data)
 				.body();
-		Log.d(TAG, body);
 		if (body.contains("action=login_ok")){
 			Log.i(TAG, "Login success");
 			showToastMessage(getString(R.string.login_success));
@@ -126,7 +126,7 @@ public class ConnectService extends RoboIntentService {
 	private void showNotification(String title, String text){
 		NotificationCompat.Builder mBuilder =
 		        new NotificationCompat.Builder(this)
-		        .setSmallIcon(R.drawable.ic_launcher)
+		        .setSmallIcon(R.drawable.ic_warning_white_24dp)
 		        .setAutoCancel(true)
 		        .setContentTitle(title)
 		        .setContentText(text);
@@ -143,7 +143,10 @@ public class ConnectService extends RoboIntentService {
 		if (title == getString(R.string.alreay_login)){
             Intent serviceIntent = new Intent(this, ForceLoginService.class);
 			PendingIntent mpending = PendingIntent.getService(this, 1, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			mBuilder.addAction(R.drawable.ic_launcher, getString(R.string.press_to_login), mpending);
+            Intent dismissServiceIntent = new Intent(this, DismissConnectService.class);
+            PendingIntent dismissPending = PendingIntent.getService(this, 2, dismissServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.addAction(R.drawable.ic_clear_black_18dp, getString(R.string.press_to_dismiss), dismissPending);
+			mBuilder.addAction(R.drawable.ic_check_black_18dp, getString(R.string.press_to_login), mpending);
             mBuilder.setAutoCancel(true);
 		}
 		NotificationManager mNotificationManager =

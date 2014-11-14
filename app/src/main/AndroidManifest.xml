@@ -40,5 +40,9 @@
             android:name=".ForceLoginService"
             android:exported="false"  >
         </service>
+        <service
+            android:name=".DismissConnectService"
+            android:exported="false"  >
+        </service>
     </application>
 </manifest>

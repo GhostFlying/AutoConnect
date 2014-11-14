@@ -12,7 +12,8 @@
     <string name="other_error">其它错误：</string>
     <string name="alreay_login">该帐号已在其它设备上登录</string>
     <string name="press_to_check">点击 查看设置 </string>
-    <string name="press_to_login">将其它设备踢下线</string>
+    <string name="press_to_login">依旧登录</string>
+    <string name="press_to_dismiss">关闭WiFi</string>
     <string name="please_connect_once">从未连接过ZJUWLAN，请先手动连接一次</string> 
 
 </resources>
