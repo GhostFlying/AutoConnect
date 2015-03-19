@@ -129,7 +129,10 @@ public class ConnectService extends RoboIntentService {
 		        .setSmallIcon(R.drawable.ic_warning_white_24dp)
 		        .setAutoCancel(true)
 		        .setContentTitle(title)
-		        .setContentText(text);
+		        .setContentText(text)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setVibrate(new long[]{0, 200})
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 		Intent resultIntent = new Intent(this, MainActivity.class);
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 		stackBuilder.addParentStack(MainActivity.class);
